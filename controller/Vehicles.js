@@ -1,24 +1,39 @@
 const cleansing = require('../CleanData/Cleansing');
 const clc = require('cli-color');
 const { Vehicle, Vehicle_Old, Changelog } = require('../models');
+const { connection } = require('../config/config_mysql2');
 
 module.exports = {
   async findVehicle(noteId) {
-    return await Vehicle.findAll({
-      where: { note_id: noteId },
-      attributes: ["id"],
-    })
-      .then(async (result) => {
-        if (result.length == 0) {
-          return false;
-        } else {
-          return result[0].id;
+    return new Promise((resolve, reject) => {
+      connection.execute(
+        `SELECT id FROM vehicles WHERE binary note_id = "${noteId}" `,
+        (err, result) => {
+          if (err) console.log(err);
+          if (result.length == 0) {
+            resolve(false);
+          } else {
+            resolve(result[0].id);
+          }
+          reject(err);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        process.exit(0);
-      });
+      );
+    });
+    // return await Vehicle.findAll({
+    //   where: { note_id: noteId },
+    //   attributes: ["id"],
+    // })
+    //   .then(async (result) => {
+    //     if (result.length == 0) {
+    //       return false;
+    //     } else {
+    //       return result[0].id;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     process.exit(0);
+    //   });
   },
   //
   async createNewVehicle(vehicle, cleansingData) {

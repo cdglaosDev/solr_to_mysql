@@ -22,23 +22,23 @@ async function StarPM() {
         for (let i = 86; i < json.length; i++) {
             const vehicle = json[i];
             let vehicle_Id = 0;
-            // const isFind = await Vehicles.findVehicle(vehicle.note_id_t)
-            //     .catch((err) => {
-            //         throw err;
-            //     });
-            // if (isFind) {
-            //     vehicle_Id = await Vehicles.updateVehicle(vehicle, excel, isFind)
-            //         .catch((err) => {
-            //             console.log(err);
-            //             process.exit(0);
-            //         });
-            // } else {
-            vehicle_Id = await Vehicles.createNewVehicle(vehicle, excel)
+            const isFind = await Vehicles.findVehicle(vehicle.note_id_t)
                 .catch((err) => {
-                    console.log(err);
-                    process.exit(0);
+                    throw err;
                 });
-            // }
+            if (isFind) {
+                vehicle_Id = await Vehicles.updateVehicle(vehicle, excel, isFind)
+                    .catch((err) => {
+                        console.log(err);
+                        process.exit(0);
+                    });
+            } else {
+                vehicle_Id = await Vehicles.createNewVehicle(vehicle, excel)
+                    .catch((err) => {
+                        console.log(err);
+                        process.exit(0);
+                    });
+            }
             // illegal Traffic
             if (vehicle.finedate_t != undefined) {
                 // illegal traffic and accident
@@ -80,6 +80,8 @@ async function StarPM() {
             );
         }
     }
+    console.log("End")
+    process.exit(0)
 }
 
 // sequelize.sync({ force: true }).then(() => {
