@@ -48,7 +48,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
     }
 
     // search province
-    if (province == null || province == undefined) {
+    if (province == "" || province == undefined || province == null) {
         values.province = null;
         values.district = null;
         values.village = null;
@@ -68,66 +68,75 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             values.village = null;
         } else {
             values.province = final_province[0].province_code;
-          
-            pro_dis = [];
-            dis.forEach(ele => {
-                if (ele.province_code == values.province) {
-                    pro_dis.push(ele);
-                }
-            });
-            
-            // search district
-            let disval = SearchValue_s(district, pro_dis);
-            if (disval.length == 0) {
-                values.district = null;
-                values.village = null;
-            } else {
-                let final_distric = []
-                let district_Id = 0;
-                disval.forEach(ele => {
-                    if (ele.name == district) {
-                        final_distric.push(ele)
+
+            if (district != "" || district != null || district != undefined) {
+                pro_dis = [];
+                dis.forEach(ele => {
+                    if (ele.province_code == values.province) {
+                        pro_dis.push(ele);
                     }
                 });
-                if (final_distric.length == 0) {
-                    district_Id = disval[0].district_code
+
+                // search district
+                let disval = SearchValue_s(district, pro_dis);
+                if (disval.length == 0) {
+                    values.district = null;
+                    values.village = null;
                 } else {
-                    district_Id = final_distric[0].district_code
-                }
-                values.district = district_Id;
-
-
-                dis_vill = [];
-                vill.forEach(elem => {
-                    if (elem.district_code == values.district) {
-                        dis_vill.push(elem);
-                    }
-                });
-
-                // search village
-                if (village != undefined && village != null) {
-                    let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
-                    let vill_result = SearchValue_m(change.toString().trim(), dis_vill);
-
-                    if (vill_result.length == 0) {
-                        values.village = null;
+                    let final_distric = []
+                    let district_Id = 0;
+                    disval.forEach(ele => {
+                        if (ele.name == district) {
+                            final_distric.push(ele)
+                        }
+                    });
+                    if (final_distric.length == 0) {
+                        district_Id = disval[0].district_code
                     } else {
-                        let vill_val = []
-                        vill_result.forEach(e => {
-                            if (e.name == village) {
-                                vill_val.push(e);
+                        district_Id = final_distric[0].district_code
+                    }
+                    values.district = district_Id;
+
+                    if (village != "" || village != null || village != undefined) {
+                        dis_vill = [];
+                        vill.forEach(elem => {
+                            if (elem.district_code == values.district) {
+                                dis_vill.push(elem);
                             }
                         });
-                        if (vill_val.length == 0) {
-                            values.village = vill_result[0].village_code;
+
+                        // search village
+                        if (village != undefined && village != "") {
+                            let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
+                            let vill_result = SearchValue_m(change.toString().trim(), dis_vill);
+
+                            if (vill_result.length == 0) {
+                                values.village = null;
+                            } else {
+                                let vill_val = []
+                                vill_result.forEach(e => {
+                                    if (e.name == village) {
+                                        vill_val.push(e);
+                                    }
+                                });
+                                if (vill_val.length == 0) {
+                                    values.village = vill_result[0].village_code;
+                                } else {
+                                    values.village = vill_val[0].village_code;
+                                }
+                            }
                         } else {
-                            values.village = vill_val[0].village_code;
+                            values.village = null;
                         }
+                    } else {
+                        values.village = null;
                     }
-                } else {
-                    values.village = null;
                 }
+            } else {
+                values.district = null;
+                values.village = null;
             }
+
         }
     }
     // console.log(values);
@@ -146,47 +155,53 @@ async function compareBrandAndModel(brand, model, compareData) {
         model: ""
     }
     // search Branch
-    let bra_val = SearchValue_s(brand, bra);
-    if (bra_val.length == 0) {
-        values.brand = null;
-        values.model = null;
-    } else {
-        let bra_f = []
-        bra_val.forEach(ele => {
-            if (brand == ele.name) {
-                bra_f.push(ele);
-            }
-        });
-        if (bra_f.length == 0) {
+    if (brand != null || brand != "") {
+        let bra_val = SearchValue_s(brand, bra);
+        if (bra_val.length == 0) {
             values.brand = null;
             values.model = null;
         } else {
-            values.brand = bra_f[0].id
-            let bra_mod = []
-            mod.forEach(el => {
-                if (el.brand_id == bra_f[0].id) {
-                    bra_mod.push(el);
+            let bra_f = []
+            bra_val.forEach(ele => {
+                if (brand == ele.name) {
+                    bra_f.push(ele);
                 }
             });
-
-            if (bra_mod.length == 0) {
+            if (bra_f.length == 0) {
+                values.brand = null;
                 values.model = null;
             } else {
-                let modf = []
-                bra_mod.forEach(e => {
-                    if (e.name == model) {
-                        modf.push(e);
+                values.brand = bra_f[0].id
+                let bra_mod = []
+                mod.forEach(el => {
+                    if (el.brand_id == bra_f[0].id) {
+                        bra_mod.push(el);
                     }
                 });
-                if (modf.length == 0) {
+
+                if (bra_mod.length == 0) {
                     values.model = null;
                 } else {
-                    values.model = modf[0].model_id
-                }
+                    let modf = []
+                    bra_mod.forEach(e => {
+                        if (e.name == model) {
+                            modf.push(e);
+                        }
+                    });
+                    if (modf.length == 0) {
+                        values.model = null;
+                    } else {
+                        values.model = modf[0].model_id
+                    }
 
+                }
             }
         }
+    } else {
+        values.brand = null;
+        values.model = null;
     }
+
     return values
 }
 
