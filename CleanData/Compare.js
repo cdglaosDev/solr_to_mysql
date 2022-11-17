@@ -44,7 +44,8 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
     let values = {
         province: "",
         district: "",
-        village: ""
+        village: "",
+        village_Id: ""
     }
 
     // search province
@@ -52,7 +53,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
         values.province = null;
         values.district = null;
         values.village = null;
-
+        values.village_Id = null;
     } else {
         let proval = SearchValue_s(province, pro);
         let final_province = []
@@ -66,6 +67,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             values.province = null;
             values.district = null;
             values.village = null;
+            values.village_Id = null;
         } else {
             values.province = final_province[0].province_code;
 
@@ -82,6 +84,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                 if (disval.length == 0) {
                     values.district = null;
                     values.village = null;
+                    values.village_Id = null;
                 } else {
                     let final_distric = []
                     let district_Id = 0;
@@ -107,8 +110,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
 
                         // search village
                         if (village != undefined && village != "") {
-                            let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
-                            let vill_result = SearchValue_m(change.toString().trim(), dis_vill);
+                            let vill_result = SearchValue_m(village.toString().trim(), dis_vill);
 
                             if (vill_result.length == 0) {
                                 values.village = null;
@@ -121,15 +123,19 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                                 });
                                 if (vill_val.length == 0) {
                                     values.village = vill_result[0].village_code;
+                                    values.village_Id = vill_result[0].village_id;
                                 } else {
                                     values.village = vill_val[0].village_code;
+                                    values.village_Id = vill_val[0].village_id;
                                 }
                             }
                         } else {
                             values.village = null;
+                            values.village_Id = null;
                         }
                     } else {
                         values.village = null;
+                        values.village_Id = null;
                     }
                 }
             } else {

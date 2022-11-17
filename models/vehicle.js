@@ -106,7 +106,8 @@ module.exports = (sequelize, DataTypes) => {
             vehicle_fax: { type: DataTypes.STRING(20), defaultValue: null },
             vehicle_activation: { type: DataTypes.STRING(20), defaultValue: null },
             pre_licence_no: { type: DataTypes.STRING(20), defaultValue: null },
-            village_id: { type: DataTypes.INTEGER(5), defaultValue: null },
+            village_id: { type: DataTypes.INTEGER(10), defaultValue: null },
+            village_code: { type: DataTypes.STRING(10), defaultValue: null },
             country_id: { type: DataTypes.INTEGER(11), defaultValue: null },
             datetime_update: { type: DataTypes.STRING(25), defaultValue: null },
             quick_id_solr: { type: DataTypes.STRING(20), defaultValue: null }

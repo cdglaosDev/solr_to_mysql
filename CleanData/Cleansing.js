@@ -138,7 +138,8 @@ async function cleansingData(car, cleansingData) {
                     owner_name: cutData(100, await checkNull(car.name_t)),
                     province_code: cutData(10, result[1].province),
                     district_code: cutData(10, result[1].district), // district data
-                    village_id: cutData(10, result[1].village),
+                    village_id: cutData(10, result[1].village_Id),
+                    village_code: cutData(10, result[1].village),
                     steering_id: cutData(11, result[2]), // steering data
                     vehicle_type_id: cutData(11, result[18]),
                     color_id: cutData(11, result[0]), // color data
