@@ -49,7 +49,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
     }
 
     // search province
-    if (province == "" || province == undefined || province == null) {
+    if (province == "" && province == undefined) {
         values.province = null;
         values.district = null;
         values.village = null;
@@ -70,8 +70,8 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             values.village_Id = null;
         } else {
             values.province = final_province[0].province_code;
-
-            if (district != "" || district != null || district != undefined) {
+            
+            if (district != "" && district != undefined) {
                 pro_dis = [];
                 dis.forEach(ele => {
                     if (ele.province_code == values.province) {
@@ -100,7 +100,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                     }
                     values.district = district_Id;
 
-                    if (village != "" || village != null || village != undefined) {
+                    if (village != "" && village != undefined) {
                         dis_vill = [];
                         vill.forEach(elem => {
                             if (elem.district_code == values.district) {
@@ -141,14 +141,11 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             } else {
                 values.district = null;
                 values.village = null;
+                values.village_Id = null;
             }
 
         }
     }
-    // console.log(values);
-    // process.exit(0);
-
-
     return values
 
 }
@@ -161,7 +158,7 @@ async function compareBrandAndModel(brand, model, compareData) {
         model: ""
     }
     // search Branch
-    if (brand != null || brand != "") {
+    if (brand != undefined  && brand != "") {
         let bra_val = SearchValue_s(brand, bra);
         if (bra_val.length == 0) {
             values.brand = null;
