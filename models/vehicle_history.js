@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         license_no_status: DataTypes.ENUM('uses','not_uses'),
         remark: DataTypes.TEXT,
         created_by: DataTypes.INTEGER,
+    },{
+        freezeTableName: true,
+
     })
     return Vehiclehistory;
 }

@@ -71,6 +71,8 @@ module.exports = (sequelize, DataTypes) => {
         lost_date: DataTypes.STRING(25),
         lost_custom: DataTypes.STRING(50),
         lost_date_custom: DataTypes.STRING(25),
+    }, {
+        freezeTableName: true,
     })
     return Vehicle_old
 }

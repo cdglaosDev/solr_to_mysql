@@ -110,8 +110,15 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
 
                         // search village
                         if (village != undefined && village != "") {
-                            let vill_result = SearchValue_m(village.toString().trim(), dis_vill);
-
+                            let dis_code = parseInt(values.district);
+                            let vill_result = "";
+                            if (dis_code >= 101 && dis_code <= 109) {
+                                let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
+                                vill_result = SearchValue_m(change.toString().trim(), dis_vill);
+                            } else {
+                                vill_result = SearchValue_m(village.toString().trim(), dis_vill);
+                            }
+                            
                             if (vill_result.length == 0) {
                                 values.village = null;
                             } else {

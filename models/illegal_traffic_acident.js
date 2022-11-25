@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BIGINT,
             allowNull: false,
         },
+    },{
+        freezeTableName: true,
+
     })
     return Illegal_traffic_acident
 

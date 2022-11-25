@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         user_id: DataTypes.INTEGER,
         log: DataTypes.TEXT,
         accident_no: DataTypes.INTEGER
+    }, {
+        freezeTableName: true,
+
     })
     return Illegal_traffic
 }
