@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Vehicle_old = sequelize.define('vehicle_old', {
+    const Vehicle_old = sequelize.define('vehicles_old', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,

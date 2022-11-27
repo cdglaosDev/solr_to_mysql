@@ -19,7 +19,7 @@ async function StarPM() {
 
     if (json.length != 0) {
         let num = 0;
-        for (let i = 628; i < json.length; i++) {
+        for (let i = 0; i < json.length; i++) {
             const vehicle = json[i];
             let vehicle_Id = 0;
             // const isFind = await Vehicles.findVehicle(vehicle.note_id_t)

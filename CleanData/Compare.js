@@ -68,9 +68,10 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             values.district = null;
             values.village = null;
             values.village_Id = null;
+
         } else {
             values.province = final_province[0].province_code;
-            
+
             if (district != "" && district != undefined) {
                 pro_dis = [];
                 dis.forEach(ele => {
@@ -85,65 +86,72 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                     values.district = null;
                     values.village = null;
                     values.village_Id = null;
+
                 } else {
                     let final_distric = []
                     let district_Id = 0;
+
                     disval.forEach(ele => {
                         if (ele.name == district) {
                             final_distric.push(ele)
                         }
                     });
                     if (final_distric.length == 0) {
-                        district_Id = disval[0].district_code
+                        values.district = null;
+                        values.village = null;
+                        values.village_Id = null;
+                        
                     } else {
                         district_Id = final_distric[0].district_code
-                    }
-                    values.district = district_Id;
 
-                    if (village != "" && village != undefined) {
-                        dis_vill = [];
-                        vill.forEach(elem => {
-                            if (elem.district_code == values.district) {
-                                dis_vill.push(elem);
-                            }
-                        });
-
-                        // search village
-                        if (village != undefined && village != "") {
-                            let dis_code = parseInt(values.district);
-                            let vill_result = "";
-                            if (dis_code >= 101 && dis_code <= 109) {
-                                let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
-                                vill_result = SearchValue_m(change.toString().trim(), dis_vill);
-                            } else {
-                                vill_result = SearchValue_m(village.toString().trim(), dis_vill);
-                            }
-                            
-                            if (vill_result.length == 0) {
-                                values.village = null;
-                            } else {
-                                let vill_val = []
-                                vill_result.forEach(e => {
-                                    if (e.name == village) {
-                                        vill_val.push(e);
-                                    }
-                                });
-                                if (vill_val.length == 0) {
-                                    values.village = vill_result[0].village_code;
-                                    values.village_Id = vill_result[0].village_id;
-                                } else {
-                                    values.village = vill_val[0].village_code;
-                                    values.village_Id = vill_val[0].village_id;
+                        values.district = district_Id;
+                        if (village != "" && village != undefined) {
+                            dis_vill = [];
+                            vill.forEach(elem => {
+                                if (elem.district_code == values.district) {
+                                    dis_vill.push(elem);
                                 }
+                            });
+
+                            // search village
+                            if (village != undefined && village != "") {
+                                let dis_code = parseInt(values.district);
+                                let vill_result = "";
+                                if (dis_code >= 101 && dis_code <= 109) {
+                                    let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
+                                    vill_result = SearchValue_m(change.toString().trim(), dis_vill);
+                                } else {
+                                    vill_result = SearchValue_m(village.toString().trim(), dis_vill);
+                                }
+
+                                if (vill_result.length == 0) {
+                                    values.village = null;
+                                    values.village_Id = null;
+                                } else {
+                                    let vill_val = []
+                                    vill_result.forEach(e => {
+                                        if (e.name == village) {
+                                            vill_val.push(e);
+                                        }
+                                    });
+                                    if (vill_val.length == 0) {
+                                        values.village = vill_result[vill_result.length - 1].village_code;
+                                        values.village_Id = vill_result[vill_result.length - 1].village_id;
+                                    } else {
+                                        values.village = vill_val[0].village_code;
+                                        values.village_Id = vill_val[0].village_id;
+                                    }
+                                }
+                            } else {
+                                values.village = null;
+                                values.village_Id = null;
                             }
                         } else {
                             values.village = null;
                             values.village_Id = null;
                         }
-                    } else {
-                        values.village = null;
-                        values.village_Id = null;
                     }
+
                 }
             } else {
                 values.district = null;
@@ -165,7 +173,7 @@ async function compareBrandAndModel(brand, model, compareData) {
         model: ""
     }
     // search Branch
-    if (brand != undefined  && brand != "") {
+    if (brand != undefined && brand != "") {
         let bra_val = SearchValue_s(brand, bra);
         if (bra_val.length == 0) {
             values.brand = null;
