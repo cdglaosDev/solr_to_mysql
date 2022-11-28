@@ -12,6 +12,19 @@ function SearchValue_m(serach, item) {
     }
     return result;
 }
+
+function SearchValue_double(serach, item) {
+    let result = [];
+    for (let i = 0; i < item.length; i++) {
+        for (key in item[i]) {
+            if (item[i][key].toString().search(serach) == 0) {
+                result.push(item[i]);
+            }
+        }
+    }
+    return result;
+}
+
 function SearchValue_s(serach, item) {
     let result = [];
     for (let i = 0; i < item.length; i++) {
@@ -70,7 +83,7 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
             values.village_Id = null;
 
         } else {
-            values.province = final_province[0].province_code;
+            values.province = final_province[0].province_code == undefined ? null : final_province[0].province_code;
 
             if (district != "" && district != undefined) {
                 pro_dis = [];
@@ -100,9 +113,9 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                         values.district = null;
                         values.village = null;
                         values.village_Id = null;
-                        
+
                     } else {
-                        district_Id = final_distric[0].district_code
+                        district_Id = final_distric[0].district_code == undefined ? null : final_distric[0].district_code;
 
                         values.district = district_Id;
                         if (village != "" && village != undefined) {
@@ -119,9 +132,9 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                                 let vill_result = "";
                                 if (dis_code >= 101 && dis_code <= 109) {
                                     let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
-                                    vill_result = SearchValue_m(change.toString().trim(), dis_vill);
+                                    vill_result = SearchValue_double(change.toString().trim(), dis_vill);
                                 } else {
-                                    vill_result = SearchValue_m(village.toString().trim(), dis_vill);
+                                    vill_result = SearchValue_double(village.toString().trim(), dis_vill);
                                 }
 
                                 if (vill_result.length == 0) {
@@ -130,16 +143,25 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
                                 } else {
                                     let vill_val = []
                                     vill_result.forEach(e => {
-                                        if (e.name == village) {
-                                            vill_val.push(e);
+                                        if (dis_code >= 101 && dis_code <= 109) {
+                                            let change = village.replace(/\d+/g, '').replace(/ *\([^)]*\) */g, '');
+
+                                            if (e.name == change || e.name_old == change) {
+                                                vill_val.push(e);
+                                            }
+                                        } else {
+                                            if (e.name == village || e.name_old == village) {
+                                                vill_val.push(e);
+                                            }
                                         }
                                     });
+
                                     if (vill_val.length == 0) {
-                                        values.village = vill_result[vill_result.length - 1].village_code;
-                                        values.village_Id = vill_result[vill_result.length - 1].village_id;
+                                        values.village = vill_result[vill_result.length - 1].village_code == undefined ? null : vill_result[vill_result.length - 1].village_code;
+                                        values.village_Id = vill_result[vill_result.length - 1].village_id == undefined ? null : vill_result[vill_result.length - 1].village_id;
                                     } else {
-                                        values.village = vill_val[0].village_code;
-                                        values.village_Id = vill_val[0].village_id;
+                                        values.village = vill_val[0].village_code == undefined ? null : vill_val[0].village_code;
+                                        values.village_Id = vill_val[0].village_id == undefined ? null : vill_val[0].village_id;
                                     }
                                 }
                             } else {
@@ -161,6 +183,8 @@ async function compareProvinceAndDistrictandVillage(province, district, village,
 
         }
     }
+    // console.log(values);
+    // process.exit(0);
     return values
 
 }
